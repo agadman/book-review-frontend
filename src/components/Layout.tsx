@@ -1,4 +1,5 @@
 import Header from "./Header"
+import Footer from "./Footer"
 import { Outlet } from "react-router-dom"
 
 const Layout = () => {
@@ -8,7 +9,7 @@ const Layout = () => {
       <main>
         <Outlet />
       </main>
-      <footer>importera footer komponent istället</footer>
+      <Footer />
     </>
   )
 }

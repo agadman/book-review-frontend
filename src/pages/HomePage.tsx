@@ -7,6 +7,17 @@ interface Book {
   thumbnail?: string;
 }
 
+interface GoogleBookItem {
+  id: string;
+  volumeInfo: {
+    title: string;
+    authors?: string[];
+    imageLinks?: {
+      thumbnail?: string;
+    };
+  };
+}
+
 const HomePage = () => {
   const [books, setBooks] = useState<Book[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -22,21 +33,22 @@ const HomePage = () => {
           const resp = await fetch("https://www.googleapis.com/books/v1/volumes?q=harry+potter");
   
           if(!resp.ok){
-            throw Error;
-          } else {
-            const data = await resp.json();
+            throw new Error("API error");
+          } 
+
+          const data = await resp.json();
+
+          const mappedBooks: Book[] = data.items.map((item: GoogleBookItem) => ({
+            id: item.id,
+            title: item.volumeInfo.title,
+            authors: item.volumeInfo.authors || ["Unknown"],
+            thumbnail: item.volumeInfo.imageLinks?.thumbnail
+          }));
+
+          setBooks(mappedBooks);
+          setError(null);
   
-            const mappedBooks: Book[] = data.items.map((item: any) => ({
-              id: item.id,
-              title: item.volumeInfo.title,
-              authors: item.volumeInfo.authors || ["Unknown"],
-              thumbnail: item.volumeInfo.imageLinks?.thumbnail
-            }));
-  
-            setBooks(mappedBooks);
-            setError(null);
-  
-          }
+        
         } catch (error) {
           console.log(error);
           setError("Något gick fel när böckerna skulle hämtas.");

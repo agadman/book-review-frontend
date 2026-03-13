@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import type { Book } from "../types/book";
 import { searchBooks } from "../services/googleBooksService";
+import { useBookStore } from "../store/bookStore";
 
 const HomePage = () => {
-  const [books, setBooks] = useState<Book[]>([]);
-  const [query, setQuery] = useState<string>("");
+  // Hämtar böcker och query från store
+  const books = useBookStore((state) => state.books);
+  const setBooks = useBookStore((state) => state.setBooks);
+  const query = useBookStore((state) => state.query);
+  const setQuery = useBookStore((state) => state.setQuery);
+
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   

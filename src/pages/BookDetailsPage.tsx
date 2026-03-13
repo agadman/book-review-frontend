@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import type { Book } from "../types/book";
 import { getBookById } from "../services/googleBooksService";
+import { useBookStore } from "../store/bookStore";
 
 const BookDetailsPage = () => {
   const { id } = useParams();
 
+  const booksInStore = useBookStore((state) => state.books);
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -13,13 +15,19 @@ const BookDetailsPage = () => {
   useEffect(() => {
     if (!id) return;
 
+    const existingBook = booksInStore.find((b) => b.id === id);
+    if (existingBook) {
+      setBook(existingBook);
+      return;
+    }
+
     const fetchBookDetails = async () => {
       try {
         setLoading(true);
         setBook(null);
 
-        const book = await getBookById(id);
-        setBook(book);
+        const fetchedBook = await getBookById(id);
+        setBook(fetchedBook);
         
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -33,7 +41,7 @@ const BookDetailsPage = () => {
     };
 
     fetchBookDetails();
-  }, [id]);
+  }, [id, booksInStore]);
 
   if (loading) return <p>Laddar bok...</p>;
   if (error) return <p>{error}</p>;
@@ -41,6 +49,8 @@ const BookDetailsPage = () => {
 
   return (
     <div>
+      <Link to="/">← Tillbaka</Link>
+
       <h1>{book.title}</h1>
 
       <p><strong>Författare:</strong> {book.authors.join(", ")}</p>
@@ -49,20 +59,8 @@ const BookDetailsPage = () => {
         <img src={book.thumbnail} alt={book.title} />
       )}
 
-      {book.publishedDate && (
-        <p><strong>Publicerad:</strong> {book.publishedDate}</p>
-      )}
-
-      {book.pageCount && (
-        <p><strong>Antal sidor:</strong> {book.pageCount}</p>
-      )}
-
       {book.averageRating && (
         <p><strong>Betyg:</strong> {book.averageRating}</p>
-      )}
-
-      {book.categories && (
-        <p><strong>Kategori:</strong> {book.categories.join(", ")}</p>
       )}
 
       {book.description && (

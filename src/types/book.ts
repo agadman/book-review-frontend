@@ -6,7 +6,6 @@ export interface Book {
   description?: string;
   publishedDate?: string;
   averageRating?: number;
-  pageCount?: number;
   categories?: string[];
 }
 
@@ -18,7 +17,6 @@ export interface GoogleBookItem {
     description?: string;
     publishedDate?: string;
     averageRating?: number;
-    pageCount?: number;
     categories?: string[];
     imageLinks?: {
       thumbnail?: string;

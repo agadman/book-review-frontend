@@ -1,8 +1,14 @@
+import { useParams } from "react-router-dom";
 
 const BookDetailsPage = () => {
-  return (
-    <div>BookDetailsPage</div>
-  )
-}
+  const { id } = useParams(); // Detta är id från URL
 
-export default BookDetailsPage
+  return (
+    <div>
+      <h1>Book Details</h1>
+      <p>Bokens ID: {id}</p>
+    </div>
+  );
+};
+
+export default BookDetailsPage;

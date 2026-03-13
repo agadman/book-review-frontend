@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Book, GoogleBookItem } from "../types/book";
+import { Link } from "react-router-dom";
 
 const GOOGLE_BOOKS_KEY = import.meta.env.VITE_GOOGLE_BOOKS_KEY;
 
@@ -13,7 +14,7 @@ const HomePage = () => {
       if (!searchQuery) return;
         try {
           setLoading(true);
-          const resp = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchQuery)}&maxResults=10&key=${GOOGLE_BOOKS_KEY}`);
+          const resp = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle${encodeURIComponent(searchQuery)}&maxResults=10&key=${GOOGLE_BOOKS_KEY}`);
   
           if(!resp.ok){
             throw new Error("API error");
@@ -68,7 +69,8 @@ const HomePage = () => {
         <div>
           {books.map((book) => (
             <section key={book.id}>
-              <h2>{book.title}</h2> — <p>{book.authors.join(", ")}</p>
+              <h2><Link to={`/books/${book.id}`}>{book.title}</Link></h2>
+              <p>{book.authors.join(", ")}</p>
               {book.thumbnail && <br />}
               {book.thumbnail && (
                 <img src={book.thumbnail} alt={book.title} />

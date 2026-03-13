@@ -3,6 +3,11 @@ export interface Book {
   title: string;
   authors: string[];
   thumbnail?: string;
+  description?: string;
+  publishedDate?: string;
+  averageRating?: number;
+  pageCount?: number;
+  categories?: string[];
 }
 
 export interface GoogleBookItem {
@@ -10,6 +15,11 @@ export interface GoogleBookItem {
   volumeInfo: {
     title: string;
     authors?: string[];
+    description?: string;
+    publishedDate?: string;
+    averageRating?: number;
+    pageCount?: number;
+    categories?: string[];
     imageLinks?: {
       thumbnail?: string;
     };

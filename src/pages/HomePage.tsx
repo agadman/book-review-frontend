@@ -1,36 +1,19 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import type { Book, GoogleBookItem } from "../types/book";
 
-interface Book {
-  id: string;
-  title: string;
-  authors: string[];
-  thumbnail?: string;
-}
-
-interface GoogleBookItem {
-  id: string;
-  volumeInfo: {
-    title: string;
-    authors?: string[];
-    imageLinks?: {
-      thumbnail?: string;
-    };
-  };
-}
+const GOOGLE_BOOKS_KEY = import.meta.env.VITE_GOOGLE_BOOKS_KEY;
 
 const HomePage = () => {
   const [books, setBooks] = useState<Book[]>([]);
+  const [query, setQuery] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
   
-    useEffect(() => {
-      fetchBooks();
-    }, []);
-  
-    const fetchBooks = async () => {
+    const fetchBooks = async (searchQuery: string) => {
+      if (!searchQuery) return;
         try {
           setLoading(true);
-          const resp = await fetch("https://www.googleapis.com/books/v1/volumes?q=harry+potter");
+          const resp = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchQuery)}&maxResults=10&key=${GOOGLE_BOOKS_KEY}`);
   
           if(!resp.ok){
             throw new Error("API error");
@@ -56,10 +39,24 @@ const HomePage = () => {
           setLoading(false);
         }
       };
+
+      const handleSearch = (error: React.FormEvent) => {
+        error.preventDefault();
+        fetchBooks(query);
+      }
   
     return (
       <div>
         <h1>Book Review App</h1>
+        <form onSubmit={handleSearch}>
+          <input 
+            type="text" 
+            value={query} 
+            onChange={(e) => setQuery(e.target.value)} 
+            placeholder="Sök efter böcker..." 
+          />
+          <button type="submit">Sök</button>
+        </form>
         {
           error && <p>{error}</p>
         }

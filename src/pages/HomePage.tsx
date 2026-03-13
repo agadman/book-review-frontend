@@ -14,13 +14,19 @@ const HomePage = () => {
       if (!searchQuery) return;
         try {
           setLoading(true);
-          const resp = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle${encodeURIComponent(searchQuery)}&maxResults=10&key=${GOOGLE_BOOKS_KEY}`);
+          const resp = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(searchQuery)}&maxResults=10&key=${GOOGLE_BOOKS_KEY}`);
   
           if(!resp.ok){
             throw new Error("API error");
           } 
 
           const data = await resp.json();
+
+          if (!data.items) {
+            setBooks([]);
+            setError("Inga böcker hittades.");
+            return;
+          }
 
           const mappedBooks: Book[] = data.items.map((item: GoogleBookItem) => ({
             id: item.id,

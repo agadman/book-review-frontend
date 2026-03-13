@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import type { Book } from "../types/book";
-
-const GOOGLE_BOOKS_KEY = import.meta.env.VITE_GOOGLE_BOOKS_KEY;
+import { getBookById } from "../services/googleBooksService";
 
 const BookDetailsPage = () => {
   const { id } = useParams();
@@ -15,36 +14,19 @@ const BookDetailsPage = () => {
     if (!id) return;
 
     const fetchBookDetails = async () => {
-      setLoading(true);
-      setError(null);
-
       try {
-        const response = await fetch(
-          `https://www.googleapis.com/books/v1/volumes/${id}?key=${GOOGLE_BOOKS_KEY}`
-        );
+        setLoading(true);
+        setBook(null);
 
-        if (!response.ok) {
-          throw new Error("Något gick fel när boken hämtades");
-        }
-
-        const data = await response.json();
-
-        const mappedBook: Book = {
-          id: data.id,
-          title: data.volumeInfo.title,
-          authors: data.volumeInfo.authors || ["Unknown"],
-          thumbnail: data.volumeInfo.imageLinks?.thumbnail,
-          description: data.volumeInfo.description,
-          publishedDate: data.volumeInfo.publishedDate,
-          averageRating: data.volumeInfo.averageRating,
-          pageCount: data.volumeInfo.pageCount,
-          categories: data.volumeInfo.categories
-        };
-
-        setBook(mappedBook);
-
+        const book = await getBookById(id);
+        setBook(book);
+        
       } catch (err: unknown) {
-        setError((err as Error).message || "Ett oväntat fel inträffade");
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("Ett oväntat fel inträffade");
+        }
       } finally {
         setLoading(false);
       }

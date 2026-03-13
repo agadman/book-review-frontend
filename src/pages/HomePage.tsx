@@ -1,56 +1,41 @@
 import { useState } from "react";
-import type { Book, GoogleBookItem } from "../types/book";
 import { Link } from "react-router-dom";
-
-const GOOGLE_BOOKS_KEY = import.meta.env.VITE_GOOGLE_BOOKS_KEY;
+import type { Book } from "../types/book";
+import { searchBooks } from "../services/googleBooksService";
 
 const HomePage = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [query, setQuery] = useState<string>("");
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   
-    const fetchBooks = async (searchQuery: string) => {
-      if (!searchQuery) return;
-        try {
-          setLoading(true);
-          const resp = await fetch(`https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(searchQuery)}&maxResults=10&key=${GOOGLE_BOOKS_KEY}`);
-  
-          if(!resp.ok){
-            throw new Error("API error");
-          } 
+  const fetchBooks = async (searchQuery: string) => {
+      if (!searchQuery.trim()) return;
 
-          const data = await resp.json();
+      try {
+        setLoading(true);
 
-          if (!data.items) {
-            setBooks([]);
-            setError("Inga böcker hittades.");
-            return;
-          }
+        const books = await searchBooks(searchQuery);
+        setBooks(books);
 
-          const mappedBooks: Book[] = data.items.map((item: GoogleBookItem) => ({
-            id: item.id,
-            title: item.volumeInfo.title,
-            authors: item.volumeInfo.authors || ["Unknown"],
-            thumbnail: item.volumeInfo.imageLinks?.thumbnail
-          }));
-
-          setBooks(mappedBooks);
+        if (books.length === 0) {
+          setError("Inga böcker hittades.");
+        } else {
           setError(null);
-  
-        
-        } catch (error) {
-          console.log(error);
-          setError("Något gick fel när böckerna skulle hämtas.");
-        } finally {
-          setLoading(false);
         }
-      };
 
-      const handleSearch = (error: React.FormEvent) => {
-        error.preventDefault();
-        fetchBooks(query);
+      } catch (err: unknown) {
+        console.error(err);
+        setError("Något gick fel när böckerna skulle hämtas.");
+      } finally {
+        setLoading(false);
       }
+    };
+
+    const handleSearch = (event: React.FormEvent) => {
+      event.preventDefault();
+      fetchBooks(query);
+    }
   
     return (
       <div>

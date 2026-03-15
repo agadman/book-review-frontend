@@ -1,15 +1,44 @@
+import { useState } from "react";
 
-const ReviewForm = () => {
+interface ReviewFormProps {
+    bookId: string;
+}
+
+const ReviewForm = ({bookId}: ReviewFormProps) => {
+    const [text, setText] = useState("");
+    const [rating, setRating] = useState(1);
+
+    const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        setText(event.target.value);
+    };
+
+    const handleRatingChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setRating(Number(event.target.value));
+    };
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+
+        console.log({
+            bookId,
+            text,
+            rating,
+        });
+
+        setText("");
+        setRating(1);
+    };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
         <h2>Skriv en recension</h2>
         <label>
             recension:
-            <textarea />
+            <textarea value={text} onChange={handleTextChange} />
         </label>
         <label>
             Betyg:
-            <select>
+            <select value={rating} onChange={handleRatingChange}>
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
@@ -17,6 +46,7 @@ const ReviewForm = () => {
                 <option>5</option>
             </select>
         </label>
+        <button type="submit">Skicka recension</button>
     </form>
   )
 }

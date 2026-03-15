@@ -4,6 +4,7 @@ import type { Book } from "../types/book";
 import { getBookById } from "../services/googleBooksService";
 import { useBookStore } from "../store/bookStore";
 import ReviewForm from "../components/ReviewForm";
+import { useAuthStore } from "../store/authStore";
 
 const BookDetailsPage = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const BookDetailsPage = () => {
   const [book, setBook] = useState<Book | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const user = useAuthStore((state) => state.user);
 
   useEffect(() => {
     if (!id) return;
@@ -70,7 +72,7 @@ const BookDetailsPage = () => {
           <p>{book.description}</p>
         </div>
       )}
-      <ReviewForm />
+      {user && id && <ReviewForm bookId={id} />} 
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import type { Book } from "../types/book";
 import { getBookById } from "../services/googleBooksService";
 import { useBookStore } from "../store/bookStore";
+import ReviewForm from "../components/ReviewForm";
 
 const BookDetailsPage = () => {
   const { id } = useParams();
@@ -69,6 +70,7 @@ const BookDetailsPage = () => {
           <p>{book.description}</p>
         </div>
       )}
+      <ReviewForm />
     </div>
   );
 };

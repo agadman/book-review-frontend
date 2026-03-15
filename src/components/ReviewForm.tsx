@@ -1,4 +1,7 @@
 import { useState } from "react";
+import type { CreateReviewData } from "../types/review";
+import { createReview } from "../services/reviewService";
+import { useAuthStore } from "../store/authStore";
 
 interface ReviewFormProps {
     bookId: string;
@@ -8,6 +11,8 @@ const ReviewForm = ({bookId}: ReviewFormProps) => {
     const [text, setText] = useState("");
     const [rating, setRating] = useState(1);
 
+    const token = useAuthStore((state) => state.token);
+
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(event.target.value);
     };
@@ -16,17 +21,25 @@ const ReviewForm = ({bookId}: ReviewFormProps) => {
         setRating(Number(event.target.value));
     };
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        console.log({
+        if (!token) return;
+
+        const review: CreateReviewData = {
             bookId,
             text,
-            rating,
-        });
+            rating
+        };
 
-        setText("");
-        setRating(1);
+        try {
+            await createReview(review, token);
+
+                setText("");
+                setRating(1);
+        } catch (error) {
+            console.error("Det gick inte att lämna en recenssion nu. Försök igen senare.", error)
+        }
     };
 
   return (
@@ -39,11 +52,11 @@ const ReviewForm = ({bookId}: ReviewFormProps) => {
         <label>
             Betyg:
             <select value={rating} onChange={handleRatingChange}>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+                <option value={5}>5</option>
             </select>
         </label>
         <button type="submit">Skicka recension</button>

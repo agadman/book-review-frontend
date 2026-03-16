@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { searchBooks } from "../services/googleBooksService";
 import { useBookStore } from "../store/bookStore";
+import type { Review } from "../types/review";
+import { getLatestReviews } from "../services/reviewService";
 
 const HomePage = () => {
-  // Hämtar böcker och query från store
   const books = useBookStore((state) => state.books);
   const setBooks = useBookStore((state) => state.setBooks);
   const query = useBookStore((state) => state.query);
@@ -12,6 +13,30 @@ const HomePage = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const [latestReviews, setLatestReviews] = useState<Review[]>([]);
+  const [reviewsLoading, setReviewsLoading] = useState<boolean>(false);
+  const [reviewsError, setReviewsError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLatestReviews = async () => {
+      try {
+        setReviewsLoading(true);
+        const data = await getLatestReviews();
+        setLatestReviews(data);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setReviewsError(err.message);
+        } else {
+          setReviewsError("Kunde inte hämta senaste recensionerna");
+        }
+      } finally {
+        setReviewsLoading(false);
+      }
+    };
+
+    fetchLatestReviews();
+  }, []);
   
   const fetchBooks = async (searchQuery: string) => {
       if (!searchQuery.trim()) return;
@@ -73,6 +98,23 @@ const HomePage = () => {
             </section>
           ))}
         </div>
+        <div>
+        <h2>Senaste recensioner</h2>
+        {reviewsLoading && <p>Laddar recensioner...</p>}
+        {reviewsError && <p>{reviewsError}</p>}
+        {!reviewsLoading && latestReviews.length === 0 && <p>Inga recensioner ännu.</p>}
+        <ul>
+          {latestReviews.map((review) => (
+            <li key={review.id}>
+              <Link to={`/books/${review.bookId}`}>
+                <strong>{review.username}</strong> recenserade "{review.text.substring(0, 40)}..."
+              </Link>
+              <br />
+              <small>{new Date(review.createdAt).toLocaleString()}</small>
+            </li>
+          ))}
+        </ul>
+      </div>
       </div>
     );
 }

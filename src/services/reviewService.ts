@@ -26,3 +26,15 @@ export const getReviewsByBook = async (
 
   return resp.data;
 };
+
+export const getLatestReviews = async (): Promise<Review[]> => {
+  const resp = await axios.get(`${API_URL}/latest`);
+  return resp.data;
+};
+
+export const getMyReviews = async (token: string): Promise<Review[]> => {
+  const resp = await axios.get(`${API_URL}/me`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return resp.data;
+};

@@ -35,6 +35,7 @@ body {
   flex-direction: column;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   background-color: #FEF2F2;
+  color: #333;
 }
 
 #root {

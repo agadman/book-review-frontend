@@ -4,6 +4,7 @@ import { searchBooks } from "../services/googleBooksService";
 import { useBookStore } from "../store/bookStore";
 import type { Review } from "../types/review";
 import { getLatestReviews } from "../services/reviewService";
+import "./HomePage.css";
 
 const HomePage = () => {
   const books = useBookStore((state) => state.books);
@@ -67,17 +68,19 @@ const HomePage = () => {
     }
   
     return (
-      <div>
-        <h1>Book Review App</h1>
-        <form onSubmit={handleSearch}>
+      <div className="wrapper">
+        <form onSubmit={handleSearch} className="search-form">
           <input 
             type="text" 
             value={query} 
             onChange={(e) => setQuery(e.target.value)} 
             placeholder="Sök efter böcker..." 
+            className="search-input"
           />
           <button type="submit">Sök</button>
         </form>
+        <h1>Böcker</h1>
+
         {
           error && <p>{error}</p>
         }
@@ -85,35 +88,35 @@ const HomePage = () => {
         {
           loading && <p>Laddar böcker...</p>
         }
-        
-        <div>
-          {books.map((book) => (
-            <section key={book.id}>
-              <h2><Link to={`/books/${book.id}`}>{book.title}</Link></h2>
-              <p>{book.authors.join(", ")}</p>
-              {book.thumbnail && <br />}
-              {book.thumbnail && (
-                <img src={book.thumbnail} alt={book.title} />
-              )}
-            </section>
-          ))}
-        </div>
-        <div>
-        <h2>Senaste recensioner</h2>
+
+        {books.length === 0 && !error && !loading ? (
+          <p className="placeholder-text">Sök efter en bok för att se resultaten här...</p>
+        ) : (
+          <div className="grid">
+            {books.map((book) => (
+              <section key={book.id} className="book-card">
+                <h2><Link to={`/books/${book.id}`}>{book.title}</Link></h2>
+                <p>{book.authors.join(", ")}</p>
+                {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
+              </section>
+            ))}
+          </div>
+        )}
+
+        <h2>Senaste recensionerna</h2>
         {reviewsLoading && <p>Laddar recensioner...</p>}
         {reviewsError && <p>{reviewsError}</p>}
         {!reviewsLoading && latestReviews.length === 0 && <p>Inga recensioner ännu.</p>}
-        <ul>
-          {latestReviews.map((review) => (
-            <li key={review.id}>
-              <Link to={`/books/${review.bookId}`}>
-                <strong>{review.username}</strong> recenserade "{review.text.substring(0, 40)}..."
-              </Link>
-              <br />
-              <small>{new Date(review.createdAt).toLocaleString()}</small>
-            </li>
-          ))}
-        </ul>
+        <div className="grid">
+        {latestReviews.map((review) => (
+          <div key={review.id} className="review-card">
+            <div className="review-info">
+              <h3><Link to={`/books/${review.bookId}`}>{review.text.substring(0, 40)}...</Link></h3>
+              <p><strong>{review.username}</strong> - {review.rating}/5</p>
+              <small>{new Date(review.createdAt).toLocaleDateString()}</small>
+            </div>
+          </div>
+        ))}
       </div>
       </div>
     );

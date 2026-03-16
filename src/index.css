@@ -27,3 +27,51 @@
     overflow-wrap: break-word;
   }
 }
+
+/* Grundlayout */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background-color: #FEF2F2;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1rem; 
+}
+
+nav a {
+  color: #F6803F;
+  text-decoration: none;
+}
+
+nav a.active {
+  text-decoration: underline;
+}
+
+button {
+  border-radius: 0.9rem;
+  border: none;
+  padding: 0.2rem 1.2rem;
+  background-color: #2E346B;
+  color: #ffff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background-color:#262c5c;
+}

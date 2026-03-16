@@ -17,7 +17,6 @@ export const createReview = async (
   return resp.data;
 };
 
-
 export const getReviewsByBook = async (
   bookId: string
 ): Promise<Review[]> => {
@@ -36,5 +35,30 @@ export const getMyReviews = async (token: string): Promise<Review[]> => {
   const resp = await axios.get(`${API_URL}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+  return resp.data;
+};
+
+export const updateReview = async (
+  id: number,
+  text: string,
+  rating: number,
+  token: string
+) => {
+  const resp = await axios.put(
+    `${API_URL}/${id}`,
+    { text, rating },
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
+
+  return resp.data;
+};
+
+export const deleteReview = async (id: number, token: string) => {
+  const resp = await axios.delete(`${API_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+
   return resp.data;
 };

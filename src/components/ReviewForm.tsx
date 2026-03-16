@@ -1,13 +1,14 @@
 import { useState } from "react";
-import type { CreateReviewData } from "../types/review";
+import type { CreateReviewData, Review } from "../types/review";
 import { createReview } from "../services/reviewService";
 import { useAuthStore } from "../store/authStore";
 
 interface ReviewFormProps {
     bookId: string;
+    onReviewCreated?: (review: Review) => void;
 }
 
-const ReviewForm = ({bookId}: ReviewFormProps) => {
+const ReviewForm = ({ bookId, onReviewCreated }: ReviewFormProps) => {
     const [text, setText] = useState("");
     const [rating, setRating] = useState(1);
 
@@ -33,14 +34,21 @@ const ReviewForm = ({bookId}: ReviewFormProps) => {
         };
 
         try {
-            await createReview(review, token);
+            // skapar recensionen via API
+            const createdReview = await createReview(review, token);
 
-                setText("");
-                setRating(1);
+            setText("");
+            setRating(1);
+
+            // Här anropar callback för o uppdatera listan i parent componenten (BookDetailsPage)
+            if (onReviewCreated) {
+                onReviewCreated(createdReview);
+            }
+
         } catch (error) {
-            console.error("Det gick inte att lämna en recenssion nu. Försök igen senare.", error)
+            console.error("Det gick inte att lämna en recension nu. Försök igen senare.", error);
         }
-    };
+        };
 
   return (
     <form onSubmit={handleSubmit}>

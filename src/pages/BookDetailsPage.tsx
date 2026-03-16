@@ -115,7 +115,12 @@ const BookDetailsPage = () => {
           ))}
         </ul>
       </div>
-      {user && id && <ReviewForm bookId={id} />} 
+      {user && id &&
+        <ReviewForm 
+            bookId={id} 
+            onReviewCreated={(newReview) => setReviews((prev) => [newReview, ...prev])} 
+        />
+      }
     </div>
   );
 };

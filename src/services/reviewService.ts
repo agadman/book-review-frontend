@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { CreateReviewData, Review } from "../types/review";
 
-const API_URL = "http://localhost:5002/api/reviews";
+const API_URL = `${import.meta.env.VITE_API_URL}/reviews`;
 
 export const createReview = async (
   data: CreateReviewData,

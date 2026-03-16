@@ -1,0 +1,15 @@
+footer {
+  background-color: #D9A5A5; 
+  color: #fff;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+  footer {
+    font-size: 1rem;
+    padding: 2rem 1rem;
+  }
+}

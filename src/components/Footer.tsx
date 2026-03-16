@@ -1,7 +1,11 @@
+import "./Footer.css";
 
 const Footer = () => {
   return (
-    <div>Footer</div>
+    <footer>
+      <p>Fördjupad Frontendutveckling, Mittuniversitetet</p>
+      <p>&copy; Annika Gadman</p>
+    </footer>
   )
 }
 

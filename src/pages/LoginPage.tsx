@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/authStore";
 import { login } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import "./Auth.css";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -16,7 +17,7 @@ const LoginPage = () => {
     try {
       setError(null);
       const data = await login({ username, password });
-      setUser(username, data.token); // sparar det i store
+      setUser({username}, data.token); // sparar det i store
       navigate("/"); 
     } catch (err: unknown) {
         if (err instanceof AxiosError) {
@@ -27,15 +28,32 @@ const LoginPage = () => {
     }
   };
 
-  return (
-    <div>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <input placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
-        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-        <button type="submit">Logga in</button>
+   return (
+    <div className="auth-wrapper">
+      <h1>Logga in</h1>
+
+      <form onSubmit={handleSubmit} className="auth-form">
+        <input
+          className="auth-input"
+          placeholder="Användarnamn"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+
+        <input
+          className="auth-input"
+          type="password"
+          placeholder="Lösenord"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button className="auth-button" type="submit">
+          Logga in
+        </button>
       </form>
-      {error && <p>{error}</p>}
+
+      {error && <p className="auth-error">{error}</p>}
     </div>
   );
 };

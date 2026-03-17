@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuthStore } from "../store/authStore";
 import type { Review } from "../types/review";
 import { getMyReviews, deleteReview, updateReview } from "../services/reviewService";
+import "./MyProfilePage.css";
 
 const MyProfilePage = () => {
   const token = useAuthStore((state) => state.token);
@@ -83,10 +84,10 @@ const MyProfilePage = () => {
   if (reviews.length === 0) return <p>Du har inte lämnat några recensioner ännu.</p>;
 
   return (
-    <div>
+    <div className="profile-wrapper">
       <h1>Min profil</h1>
       <h2>Mina recensioner</h2>
-      <ul>
+      <ul className="review-list">
         {reviews.map((review) => (
           <li key={review.id}>
             {editingId === review.id ? (
@@ -111,10 +112,15 @@ const MyProfilePage = () => {
               </>
             ) : (
               <>
-                <strong>{review.username}</strong> ({review.rating}/5): {review.text}
-                <br />
-                <p>{new Date(review.createdAt).toLocaleString()}</p>
-                <br />
+                <p className="review-meta">
+                  <strong>{review.username}</strong> • {review.rating}/5
+                </p>
+
+                <p className="review-text">{review.text}</p>
+
+                <p className="review-date">
+                  {new Date(review.createdAt).toLocaleDateString()}
+                </p>
 
                 <button onClick={() => handleEdit(review)}>Edit</button>
                 <button onClick={() => handleDelete(review.id)}>Delete</button>

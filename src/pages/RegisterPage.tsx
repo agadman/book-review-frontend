@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/authStore";
 import { register } from "../services/authService";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import "./Auth.css";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -21,7 +22,7 @@ const RegisterPage = () => {
       const data = await register({ username, password });
 
       if (data.token) {
-        setUser(username, data.token);
+        setUser({username}, data.token);
       }
 
       navigate("/");
@@ -36,27 +37,31 @@ const RegisterPage = () => {
   };
 
   return (
-    <div>
+    <div className="auth-wrapper">
       <h1>Registrera konto</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="auth-form">
         <input
-          placeholder="Username"
+          className="auth-input"
+          placeholder="Användarnamn"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
 
         <input
+          className="auth-input"
           type="password"
-          placeholder="Password"
+          placeholder="Lösenord"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button type="submit">Registrera</button>
+        <button className="auth-button" type="submit">
+          Registrera
+        </button>
       </form>
 
-      {error && <p>{error}</p>}
+      {error && <p className="auth-error">{error}</p>}
     </div>
   );
 };

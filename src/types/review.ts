@@ -1,6 +1,8 @@
 export interface Review {
   id: number;
   bookId: string;
+  bookTitle?: string;  
+  bookThumbnail?: string;
   username: string;
   text: string;
   rating: number;
@@ -9,6 +11,8 @@ export interface Review {
 
 export interface CreateReviewData {
   bookId: string;
+  bookTitle: string;    
+  bookThumbnail?: string;
   text: string;
-  rating: number;
+  rating: number; 
 }

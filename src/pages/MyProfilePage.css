@@ -1,21 +1,29 @@
 .profile-wrapper {
-  max-width: 700px;
-  margin: 2rem auto;
+  width: 100%;
   padding: 0 1rem;
 }
 
 .review-list {
   list-style: none;
+  width: 100%;
   padding: 0;
   margin: 0;
 }
 
 .review-item {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;  
+  gap:0.5rem;       
+}
+
+.review-book-thumbnail {
+  width: 60px;
+  height: auto;
 }
 
 .review-row {
+  width: 100%;
   display: flex;
   flex-direction: column; 
   gap: 0.5rem;
@@ -23,6 +31,7 @@
 
 .review-content {
   flex: 1;
+  min-width: 0;
 }
 
 .review-meta {
@@ -94,10 +103,13 @@
 }
 
 @media (min-width: 600px) {
+
+
   .review-row {
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-between; /* ⭐ viktigt */
     align-items: flex-start;
+    gap: 2rem; /* ⭐ ger luft */
   }
 
   .review-actions {

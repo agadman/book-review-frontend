@@ -6,10 +6,12 @@ import "./ReviewForm.css";
 
 interface ReviewFormProps {
     bookId: string;
+    bookTitle: string;     
+    bookThumbnail?: string; 
     onReviewCreated?: (review: Review) => void;
 }
 
-const ReviewForm = ({ bookId, onReviewCreated }: ReviewFormProps) => {
+const ReviewForm = ({ bookId, bookTitle, bookThumbnail, onReviewCreated }: ReviewFormProps) => {
     const [text, setText] = useState("");
     const [rating, setRating] = useState(1);
 
@@ -30,6 +32,8 @@ const ReviewForm = ({ bookId, onReviewCreated }: ReviewFormProps) => {
 
         const review: CreateReviewData = {
             bookId,
+            bookTitle,      
+            bookThumbnail,
             text,
             rating
         };

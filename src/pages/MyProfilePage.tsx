@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuthStore } from "../store/authStore";
+import { getMyReviews, updateReview, deleteReview } from "../services/reviewService";
 import type { Review } from "../types/review";
-import { getMyReviews, deleteReview, updateReview } from "../services/reviewService";
 import "./MyProfilePage.css";
 
 const MyProfilePage = () => {
@@ -13,46 +13,25 @@ const MyProfilePage = () => {
   const [editText, setEditText] = useState("");
   const [editRating, setEditRating] = useState(1);
 
+  // Hämtar mina recensioner
   useEffect(() => {
     if (!token) return;
 
-    const fetchMyReviews = async () => {
+    const fetchReviews = async () => {
       try {
         setLoading(true);
         const data = await getMyReviews(token);
         setReviews(data);
       } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("Ett oväntat fel inträffade");
-        }
+        if (err instanceof Error) setError(err.message);
+        else setError("Kunde inte hämta recensioner");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMyReviews();
+    fetchReviews();
   }, [token]);
-
-  const handleDelete = async (id: number) => {
-    if (!token) return;
-
-    try {
-      await deleteReview(id, token);
-      setReviews(reviews.filter((r) => r.id !== id));
-    } catch {
-      alert("Kunde inte ta bort recensionen");
-    }
-  };
-
-  const handleEditTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setEditText(event.target.value);
-  };
-
-  const handleEditRatingChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setEditRating(Number(event.target.value));
-  };
 
   const handleEdit = (review: Review) => {
     setEditingId(review.id);
@@ -62,19 +41,24 @@ const MyProfilePage = () => {
 
   const handleSave = async (id: number) => {
     if (!token) return;
-
     try {
       await updateReview(id, editText, editRating, token);
-
       setReviews((prev) =>
-        prev.map((r) =>
-          r.id === id ? { ...r, text: editText, rating: editRating } : r
-        )
+        prev.map((r) => (r.id === id ? { ...r, text: editText, rating: editRating } : r))
       );
-
       setEditingId(null);
     } catch {
       alert("Kunde inte uppdatera recensionen");
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    if (!token) return;
+    try {
+      await deleteReview(id, token);
+      setReviews((prev) => prev.filter((r) => r.id !== id));
+    } catch {
+      alert("Kunde inte ta bort recensionen");
     }
   };
 
@@ -84,75 +68,74 @@ const MyProfilePage = () => {
   if (reviews.length === 0) return <p>Du har inte lämnat några recensioner ännu.</p>;
 
   return (
-  <div className="profile-wrapper">
-    <h1>Min profil</h1>
-    <h2>Mina recensioner</h2>
+    <div className="profile-wrapper">
+      <h1>Min profil</h1>
+      <h2>Mina recensioner</h2>
 
-    <ul className="review-list">
-      {reviews.map((review) => (
-        <li key={review.id} className="review-item">
-  
-  {editingId === review.id ? (
-    <div className="review-edit">
-      
-      <label>
-        Recension:
-        <textarea
-          value={editText}
-          onChange={handleEditTextChange}
-        />
-      </label>
+      <ul className="review-list">
+        {reviews.map((review) => (
+          <li key={review.id} className="review-item">
+             {review.bookThumbnail && (
+                    <img
+                      src={review.bookThumbnail}
+                      alt={review.bookTitle || "Okänd bok"}
+                      className="review-book-thumbnail"
+                    />
+                  )}
+                  <p className="review-book-title">{review.bookTitle || "Okänd bok"}</p>
+            {editingId === review.id ? (
+              <div className="review-edit">
+                <label>
+                  Recension:
+                  <textarea value={editText} onChange={(e) => setEditText(e.target.value)} />
+                </label>
+                <label>
+                  Betyg:
+                  <select
+                    value={editRating}
+                    onChange={(e) => setEditRating(Number(e.target.value))}
+                  >
+                    {[1, 2, 3, 4, 5].map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <div className="review-edit-buttons">
+                  <button onClick={() => handleSave(review.id)}>Spara</button>
+                  <button onClick={() => setEditingId(null)}>Avbryt</button>
+                </div>
+              </div>
+            ) : (
+              <div className="review-row">
+                <div className="review-content">
+          
 
-      <label>
-        Betyg:
-        <select
-          value={editRating}
-          onChange={handleEditRatingChange}
-        >
-          <option value={1}>1</option>
-          <option value={2}>2</option>
-          <option value={3}>3</option>
-          <option value={4}>4</option>
-          <option value={5}>5</option>
-        </select>
-      </label>
 
-      <div className="review-edit-buttons">
-        <button onClick={() => handleSave(review.id)}>Spara</button>
-        <button onClick={() => setEditingId(null)}>Avbryt</button>
-      </div>
-
+                  <p className="review-meta">
+                    <strong>{review.username}</strong> - {review.rating}/5
+                  </p>
+                  <p className="review-text">{review.text}</p>
+                  <p className="review-date">
+                    {new Date(review.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <div className="review-actions">
+                  <button onClick={() => handleEdit(review)} className="edit-btn">
+                    Edit
+                  </button>
+                  <button onClick={() => handleDelete(review.id)} className="delete-btn">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
-  ) : (
-
-    <div className="review-row">
-
-      <div className="review-content">
-        <p className="review-meta">
-          <strong>{review.username}</strong> • {review.rating}/5
-        </p>
-
-        <p className="review-text">{review.text}</p>
-
-        <p className="review-date">
-          {new Date(review.createdAt).toLocaleDateString()}
-        </p>
-      </div>
-
-      <div className="review-actions">
-        <button onClick={() => handleEdit(review)} className="edit-btn">Edit</button>
-        <button onClick={() => handleDelete(review.id)} className="delete-btn">Delete</button>
-      </div>
-
-    </div>
-
-  )}
-
-</li>
-      ))}
-    </ul>
-  </div>
-);
+  );
 };
 
 export default MyProfilePage;

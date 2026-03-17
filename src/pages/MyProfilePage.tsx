@@ -84,54 +84,75 @@ const MyProfilePage = () => {
   if (reviews.length === 0) return <p>Du har inte lämnat några recensioner ännu.</p>;
 
   return (
-    <div className="profile-wrapper">
-      <h1>Min profil</h1>
-      <h2>Mina recensioner</h2>
-      <ul className="review-list">
-        {reviews.map((review) => (
-          <li key={review.id}>
-            {editingId === review.id ? (
-              <>
-                <label>
-                    recension:
-                    <textarea value={editText} onChange={handleEditTextChange} />
-                </label>
-                <label>
-                    Betyg:
-                    <select value={editRating} onChange={handleEditRatingChange}>
-                        <option value={1}>1</option>
-                        <option value={2}>2</option>
-                        <option value={3}>3</option>
-                        <option value={4}>4</option>
-                        <option value={5}>5</option>
-                    </select>
-                </label>
+  <div className="profile-wrapper">
+    <h1>Min profil</h1>
+    <h2>Mina recensioner</h2>
 
-                <button onClick={() => handleSave(review.id)}>Save</button>
-                <button onClick={() => setEditingId(null)}>Cancel</button>
-              </>
-            ) : (
-              <>
-                <p className="review-meta">
-                  <strong>{review.username}</strong> • {review.rating}/5
-                </p>
+    <ul className="review-list">
+      {reviews.map((review) => (
+        <li key={review.id} className="review-item">
+  
+  {editingId === review.id ? (
+    <div className="review-edit">
+      
+      <label>
+        Recension:
+        <textarea
+          value={editText}
+          onChange={handleEditTextChange}
+        />
+      </label>
 
-                <p className="review-text">{review.text}</p>
+      <label>
+        Betyg:
+        <select
+          value={editRating}
+          onChange={handleEditRatingChange}
+        >
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+        </select>
+      </label>
 
-                <p className="review-date">
-                  {new Date(review.createdAt).toLocaleDateString()}
-                </p>
+      <div className="review-edit-buttons">
+        <button onClick={() => handleSave(review.id)}>Spara</button>
+        <button onClick={() => setEditingId(null)}>Avbryt</button>
+      </div>
 
-                <button onClick={() => handleEdit(review)}>Edit</button>
-                <button onClick={() => handleDelete(review.id)}>Delete</button>
-              </>
-            )}
-
-          </li>
-        ))}
-      </ul>
     </div>
-  );
+  ) : (
+
+    <div className="review-row">
+
+      <div className="review-content">
+        <p className="review-meta">
+          <strong>{review.username}</strong> • {review.rating}/5
+        </p>
+
+        <p className="review-text">{review.text}</p>
+
+        <p className="review-date">
+          {new Date(review.createdAt).toLocaleDateString()}
+        </p>
+      </div>
+
+      <div className="review-actions">
+        <button onClick={() => handleEdit(review)} className="edit-btn">Edit</button>
+        <button onClick={() => handleDelete(review.id)} className="delete-btn">Delete</button>
+      </div>
+
+    </div>
+
+  )}
+
+</li>
+      ))}
+    </ul>
+  </div>
+);
 };
 
 export default MyProfilePage;

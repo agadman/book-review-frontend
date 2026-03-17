@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { CreateReviewData, Review } from "../types/review";
 import { createReview } from "../services/reviewService";
 import { useAuthStore } from "../store/authStore";
+import "./ReviewForm.css";
 
 interface ReviewFormProps {
     bookId: string;
@@ -51,11 +52,11 @@ const ReviewForm = ({ bookId, onReviewCreated }: ReviewFormProps) => {
         };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="review-form">
         <h2>Skriv en recension</h2>
         <label>
-            recension:
-            <textarea value={text} onChange={handleTextChange} />
+            Recension
+            <textarea value={text} onChange={handleTextChange} placeholder="Vad tyckte du om boken?" />
         </label>
         <label>
             Betyg:

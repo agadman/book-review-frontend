@@ -1,0 +1,71 @@
+.book-details-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.back-link {
+  text-decoration: none;
+  font-size: 0.9rem;
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #F6803F;
+}
+
+.book-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.book-image {
+  max-width: 180px;
+  border-radius: 6px;
+}
+
+.book-info h1 {
+  margin-bottom: 0.5rem;
+}
+
+.author {
+  margin-bottom: 1rem;
+}
+
+.description {
+  line-height: 1.6;
+}
+
+.reviews-section {
+  margin-top: 2rem;
+}
+
+.review-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.review-item {
+  border-bottom: 1px solid #ddd;
+  padding: 1rem 0;
+}
+
+.review-text {
+  margin-bottom: 0.5rem;
+}
+
+.review-meta {
+  font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+  .book-details {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .book-image {
+    max-width: 200px;
+  }
+}

@@ -43,6 +43,9 @@
 @media (min-width: 768px) {
   .header-inner {
     grid-template-columns: auto 1fr auto;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem;
   }
 
   .logo {

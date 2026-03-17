@@ -7,6 +7,7 @@ import ReviewForm from "../components/ReviewForm";
 import { useAuthStore } from "../store/authStore";
 import type { Review } from "../types/review";
 import { getReviewsByBook } from "../services/reviewService";
+import "./BookDetailsPage.css";
 
 const BookDetailsPage = () => {
   const { id } = useParams();
@@ -79,50 +80,78 @@ const BookDetailsPage = () => {
   if (!book) return <p>Ingen bok vald</p>;
 
   return (
-    <div>
-      <Link to="/">← Tillbaka</Link>
+  <div className="book-details-wrapper">
 
-      <h1>{book.title}</h1>
+    <Link to="/" className="back-link">← Tillbaka</Link>
 
-      <p><strong>Författare:</strong> {book.authors.join(", ")}</p>
+    <div className="book-details">
 
       {book.thumbnail && (
-        <img src={book.thumbnail} alt={book.title} />
-      )}
-
-      {book.averageRating && (
-        <p><strong>Betyg:</strong> {book.averageRating}</p>
-      )}
-
-      {book.description && (
-        <div>
-          <h3>Beskrivning</h3>
-          <p>{book.description}</p>
-        </div>
-      )}
-      <div>
-        <h2>Recensioner</h2>
-        {reviewsLoading && <p>Laddar recensioner...</p>}
-        {reviewsError && <p>{reviewsError}</p>}
-        {!reviewsLoading && reviews.length === 0 && <p>Inga recensioner ännu.</p>}
-        <ul>
-          {reviews.map((review) => (
-            <li key={review.id}>
-              <strong>{review.username}</strong> ({review.rating}/5): {review.text}
-              <br />
-              <small>{new Date(review.createdAt).toLocaleString()}</small>
-            </li>
-          ))}
-        </ul>
-      </div>
-      {user && id &&
-        <ReviewForm 
-            bookId={id} 
-            onReviewCreated={(newReview) => setReviews((prev) => [newReview, ...prev])} 
+        <img
+          src={book.thumbnail}
+          alt={book.title}
+          className="book-image"
         />
-      }
+      )}
+
+      <div className="book-info">
+        <h1>{book.title}</h1>
+
+        <p className="author">
+          <strong>Författare:</strong> {book.authors.join(", ")}
+        </p>
+
+        {book.averageRating && (
+          <p><strong>Betyg:</strong> {book.averageRating}</p>
+        )}
+
+        {book.description && (
+          <>
+            <h3>Beskrivning</h3>
+            <p className="description">{book.description}</p>
+          </>
+        )}
+      </div>
+
     </div>
-  );
+
+    <div className="reviews-section">
+      <h2>Recensioner</h2>
+
+      {reviewsLoading && <p>Laddar recensioner...</p>}
+      {reviewsError && <p>{reviewsError}</p>}
+      {!reviewsLoading && reviews.length === 0 && (
+        <p>Inga recensioner ännu.</p>
+      )}
+
+      <ul className="review-list">
+        {reviews.map((review) => (
+          <li key={review.id} className="review-item">
+            <p className="review-text">{review.text}</p>
+
+            <p className="review-meta">
+              <strong>{review.username}</strong> • {review.rating}/5
+            </p>
+
+            <small>
+              {new Date(review.createdAt).toLocaleDateString()}
+            </small>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    {user && id && (
+      <ReviewForm
+        bookId={id}
+        onReviewCreated={(newReview) =>
+          setReviews((prev) => [newReview, ...prev])
+        }
+      />
+    )}
+
+  </div>
+);
 };
 
 export default BookDetailsPage;

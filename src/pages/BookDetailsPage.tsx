@@ -8,6 +8,7 @@ import { useAuthStore } from "../store/authStore";
 import type { Review } from "../types/review";
 import { getReviewsByBook } from "../services/reviewService";
 import "./BookDetailsPage.css";
+import { ArrowLeft } from "lucide-react";
 
 const BookDetailsPage = () => {
   const { id } = useParams();
@@ -82,7 +83,10 @@ const BookDetailsPage = () => {
   return (
   <div className="book-details-wrapper">
 
-    <Link to="/" className="back-link">← Tillbaka</Link>
+    <Link to="/" className="back-link">
+      <ArrowLeft size={18} />
+        Tillbaka
+    </Link>
 
     <div className="book-details">
 

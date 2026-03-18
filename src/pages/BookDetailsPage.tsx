@@ -69,6 +69,10 @@ const BookDetailsPage = () => {
     fetchReviews();
   }, [id]);
 
+  const stripHtml = (html: string) => {
+  return html.replace(/<[^>]+>/g, "");
+};
+
   if (loading) return <p>Laddar bok...</p>;
   if (error) return <p>{error}</p>;
   if (!book) return <p>Ingen bok vald</p>;
@@ -93,7 +97,7 @@ const BookDetailsPage = () => {
           {book.description && (
             <>
               <h3>Beskrivning</h3>
-              <p className="description">{book.description}</p>
+              <p className="description">{stripHtml(book.description)}</p>
             </>
           )}
         </div>

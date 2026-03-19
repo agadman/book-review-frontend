@@ -4,11 +4,12 @@ import { createReview } from "../services/reviewService";
 import { useAuthStore } from "../store/authStore";
 import "./ReviewForm.css";
 
+// Props som ReviewForm tar emot
 interface ReviewFormProps {
     bookId: string;
     bookTitle: string;     
     bookThumbnail?: string; 
-    onReviewCreated?: (review: Review) => void;
+    onReviewCreated?: (review: Review) => void; // Callback till parent för att uppdatera lista
 }
 
 const ReviewForm = ({ bookId, bookTitle, bookThumbnail, onReviewCreated }: ReviewFormProps) => {
@@ -17,14 +18,17 @@ const ReviewForm = ({ bookId, bookTitle, bookThumbnail, onReviewCreated }: Revie
 
     const token = useAuthStore((state) => state.token);
 
+     // Hanterar ändringar i textfältet
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(event.target.value);
     };
 
+     // Hanterar ändringar i betygsselect
     const handleRatingChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setRating(Number(event.target.value));
     };
 
+    // Skickar recensionen till backend
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 

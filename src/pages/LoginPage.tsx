@@ -6,9 +6,12 @@ import { AxiosError } from "axios";
 import "./Auth.css";
 
 const LoginPage = () => {
+  // State för input-fält
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+  // Funktion från zustand store för att spara användare
   const setUser = useAuthStore((state) => state.setUser);
   const navigate = useNavigate();
 
@@ -16,8 +19,8 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       setError(null);
-      const data = await login({ username, password });
-      setUser({username}, data.token); // sparar det i store
+      const data = await login({ username, password }); // API-anrop
+      setUser({username}, data.token); // sparar user och token i store
       navigate("/"); 
     } catch (err: unknown) {
         if (err instanceof AxiosError) {
@@ -48,9 +51,7 @@ const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="auth-button" type="submit">
-          Logga in
-        </button>
+        <button className="auth-button" type="submit">Logga in</button>
       </form>
 
       {error && <p className="auth-error">{error}</p>}

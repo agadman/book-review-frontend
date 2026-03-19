@@ -11,32 +11,32 @@ import { ArrowLeft } from "lucide-react";
 import type { Review } from "../types/review";
 
 const BookDetailsPage = () => {
-  const { id } = useParams();
-  const booksInStore = useBookStore((state) => state.books);
-  const [book, setBook] = useState<Book | null>(null);
+  const { id } = useParams(); // Bok-ID från URL
+  const booksInStore = useBookStore((state) => state.books); // Hämtar böcker från zustand store
+  const [book, setBook] = useState<Book | null>(null); // State för bokdetaljer
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const user = useAuthStore((state) => state.user);
+  const user = useAuthStore((state) => state.user);  // kollar inloggad användare
 
-  // Recensioner lokalt
+  // Recensioner 
   const [reviews, setReviews] = useState<Review[]>([]);
   const [reviewsLoading, setReviewsLoading] = useState(false);
   const [reviewsError, setReviewsError] = useState<string | null>(null);
 
-  // Hämta bokdetaljer
+  // Hämta bokdetaljer från store eller API
   useEffect(() => {
     if (!id) return;
 
     const existingBook = booksInStore.find((b) => b.id === id);
     if (existingBook) {
-      setBook(existingBook);
+      setBook(existingBook); // Om boken finns i store, använd den
       return;
     }
 
     const fetchBookDetails = async () => {
       try {
         setLoading(true);
-        const fetchedBook = await getBookById(id);
+        const fetchedBook = await getBookById(id); // API-anrop
         setBook(fetchedBook);
       } catch (err: unknown) {
         if (err instanceof Error) setError(err.message);
@@ -49,14 +49,14 @@ const BookDetailsPage = () => {
     fetchBookDetails();
   }, [id, booksInStore]);
 
-  // Hämta recensioner
+  // Hämtar recensioner för boken
   useEffect(() => {
     if (!id) return;
 
     const fetchReviews = async () => {
       try {
         setReviewsLoading(true);
-        const data = await getReviewsByBook(id);
+        const data = await getReviewsByBook(id); // API-anrop
         setReviews(data);
       } catch (err: unknown) {
         if (err instanceof Error) setReviewsError(err.message);
@@ -69,9 +69,10 @@ const BookDetailsPage = () => {
     fetchReviews();
   }, [id]);
 
+  // Tar bort HTML-taggar från beskrivning
   const stripHtml = (html: string) => {
-  return html.replace(/<[^>]+>/g, "");
-};
+    return html.replace(/<[^>]+>/g, "");
+  };
 
   if (loading) return <p>Laddar bok...</p>;
   if (error) return <p>{error}</p>;

@@ -5,13 +5,16 @@ import { Menu, X, BookOpen } from "lucide-react";
 import "./Header.css";
 
 const Header = () => {
+  // Hämtar användare och logout-funktion från zustand store
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
 
+  // State för mobilmeny (öppen/stängd)
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = () => setMenuOpen(false);
 
+  // tömmer store, navigerar till startsida, stänger meny
   const handleLogout = () => {
     logout();
     navigate("/");
@@ -36,43 +39,22 @@ const Header = () => {
 
         <nav className={`nav ${menuOpen ? "open" : ""}`}>
           <ul>
-            <li>
-              <NavLink to="/" onClick={closeMenu}>
-                Startsida
-              </NavLink>
-            </li>
+            <li><NavLink to="/" onClick={closeMenu}>Startsida</NavLink></li>
 
             {user && (
-              <li>
-                <NavLink to="/profile" onClick={closeMenu}>
-                  Min profil
-                </NavLink>
-              </li>
+              <li><NavLink to="/profile" onClick={closeMenu}>Min profil</NavLink></li>
             )}
 
             {!user ? (
               <>
-                <li>
-                  <NavLink to="/loggain" onClick={closeMenu}>
-                    Logga in
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/registrera" onClick={closeMenu}>
-                    Registrera
-                  </NavLink>
-                </li>
+                <li><NavLink to="/loggain" onClick={closeMenu}>Logga in</NavLink></li>
+                <li><NavLink to="/registrera" onClick={closeMenu}>Registrera</NavLink></li>
               </>
             ) : (
-              <li>
-                <button onClick={handleLogout}>
-                  Logga ut
-                </button>
-              </li>
+              <li><button onClick={handleLogout}>Logga ut</button></li>
             )}
           </ul>
         </nav>
-
       </div>
     </header>
   );

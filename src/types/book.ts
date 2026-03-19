@@ -1,3 +1,4 @@
+// Interface för en bok 
 export interface Book {
   id: string;
   title: string;
@@ -9,6 +10,7 @@ export interface Book {
   categories?: string[];
 }
 
+// Interface för data från Google Books API
 export interface GoogleBookItem {
   id: string;
   volumeInfo: {

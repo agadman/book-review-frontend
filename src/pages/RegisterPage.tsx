@@ -6,11 +6,12 @@ import { AxiosError } from "axios";
 import "./Auth.css";
 
 const RegisterPage = () => {
+  // State för input-fält och felmeddelande
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const setUser = useAuthStore((state) => state.setUser);
+  const setUser = useAuthStore((state) => state.setUser); // Funktion för att spara user i zustand store
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,8 +20,9 @@ const RegisterPage = () => {
     try {
       setError(null);
 
-      const data = await register({ username, password });
+      const data = await register({ username, password }); // API-anrop för registrering
 
+      // Sparar användare och token i store om registreringen lyckas
       if (data.token) {
         setUser({username}, data.token);
       }
@@ -29,7 +31,7 @@ const RegisterPage = () => {
 
     } catch (err: unknown) {
         if (err instanceof AxiosError) {
-            setError(err.response?.data?.message || "Reggistrering misslyckades");
+            setError(err.response?.data?.message || "Registrering misslyckades");
         } else {
             setError("Ett oväntat fel inträffade");
         }
@@ -56,9 +58,7 @@ const RegisterPage = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="auth-button" type="submit">
-          Registrera
-        </button>
+        <button className="auth-button" type="submit">Registrera</button>
       </form>
 
       {error && <p className="auth-error">{error}</p>}

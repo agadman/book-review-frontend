@@ -5,22 +5,24 @@ import type { Review } from "../types/review";
 import "./MyProfilePage.css";
 
 const MyProfilePage = () => {
-  const token = useAuthStore((state) => state.token);
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const token = useAuthStore((state) => state.token); // Token från store
+  const [reviews, setReviews] = useState<Review[]>([]); // Lista över recensioner
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // State för redigering
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editText, setEditText] = useState("");
   const [editRating, setEditRating] = useState(1);
 
-  // Hämtar mina recensioner
+  // Hämtar recensioner vid mount
   useEffect(() => {
     if (!token) return;
 
     const fetchReviews = async () => {
       try {
         setLoading(true);
-        const data = await getMyReviews(token);
+        const data = await getMyReviews(token); // API-anrop
         setReviews(data);
       } catch (err: unknown) {
         if (err instanceof Error) setError(err.message);
@@ -33,16 +35,18 @@ const MyProfilePage = () => {
     fetchReviews();
   }, [token]);
 
+  // redigering av recension
   const handleEdit = (review: Review) => {
     setEditingId(review.id);
     setEditText(review.text);
     setEditRating(review.rating);
   };
 
+  // Spara uppdaterad recension
   const handleSave = async (id: number) => {
     if (!token) return;
     try {
-      await updateReview(id, editText, editRating, token);
+      await updateReview(id, editText, editRating, token); // API-anrop
       setReviews((prev) =>
         prev.map((r) => (r.id === id ? { ...r, text: editText, rating: editRating } : r))
       );
@@ -52,10 +56,11 @@ const MyProfilePage = () => {
     }
   };
 
+  // Ta bort recension
   const handleDelete = async (id: number) => {
     if (!token) return;
     try {
-      await deleteReview(id, token);
+      await deleteReview(id, token); // API-anrop
       setReviews((prev) => prev.filter((r) => r.id !== id));
     } catch {
       alert("Kunde inte ta bort recensionen");
@@ -110,9 +115,6 @@ const MyProfilePage = () => {
             ) : (
               <div className="review-row">
                 <div className="review-content">
-          
-
-
                   <p className="review-meta">
                     <strong>{review.username}</strong> - {review.rating}/5
                   </p>
@@ -122,12 +124,8 @@ const MyProfilePage = () => {
                   </p>
                 </div>
                 <div className="review-actions">
-                  <button onClick={() => handleEdit(review)} className="edit-btn">
-                    Edit
-                  </button>
-                  <button onClick={() => handleDelete(review.id)} className="delete-btn">
-                    Delete
-                  </button>
+                  <button onClick={() => handleEdit(review)} className="edit-btn">Redigera</button>
+                  <button onClick={() => handleDelete(review.id)} className="delete-btn">Radera</button>
                 </div>
               </div>
             )}

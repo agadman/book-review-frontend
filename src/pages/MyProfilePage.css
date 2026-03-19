@@ -107,9 +107,9 @@
 
   .review-row {
     flex-direction: row;
-    justify-content: space-between; /* ⭐ viktigt */
+    justify-content: space-between; 
     align-items: flex-start;
-    gap: 2rem; /* ⭐ ger luft */
+    gap: 2rem; 
   }
 
   .review-actions {

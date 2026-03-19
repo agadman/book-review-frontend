@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Review, CreateReviewData } from "../types/review";
+// Importerar funktioner som anropar API:t
 import { 
   getLatestReviews, 
   getMyReviews, 
@@ -8,6 +9,7 @@ import {
   deleteReview as deleteReviewService
 } from "../services/reviewService";
 
+// Typdefinition för hela store:en
 interface ReviewStore {
   latestReviews: Review[];
   myReviews: Review[];
@@ -22,23 +24,30 @@ interface ReviewStore {
   deleteReview: (id: number, token: string) => Promise<void>;
 }
 
+// Skapar zustand store
 export const useReviewStore = create<ReviewStore>((set) => ({
   latestReviews: [],
   myReviews: [],
 
+  // Sparar senaste recensioner i state
   setLatestReviews: (reviews) => set({ latestReviews: reviews }),
+
+  // Sparar användarens recensioner i state
   setMyReviews: (reviews) => set({ myReviews: reviews }),
 
+   // Hämtar senaste recensioner från API och uppdaterar state
   fetchLatest: async () => {
     const reviews = await getLatestReviews();
     set({ latestReviews: reviews });
   },
 
+  // Hämtar användarens recensioner (kräver token)
   fetchMyReviews: async (token: string) => {
     const reviews = await getMyReviews(token);
     set({ myReviews: reviews });
   },
 
+  // Skapar en ny recension och lägger till den först i listorna
   createReview: async (data: CreateReviewData, token: string) => {
     const newReview = await createReviewService(data, token);
     set((state) => ({
@@ -47,6 +56,7 @@ export const useReviewStore = create<ReviewStore>((set) => ({
     }));
   },
 
+  // Uppdaterar en recension i båda listorna
   updateReview: async (id: number, text: string, rating: number, token: string) => {
     await updateReviewService(id, text, rating, token);
     set((state) => ({
@@ -55,6 +65,7 @@ export const useReviewStore = create<ReviewStore>((set) => ({
     }));
   },
 
+  // Tar bort en recension från båda listorna
   deleteReview: async (id: number, token: string) => {
     await deleteReviewService(id, token);
     set((state) => ({

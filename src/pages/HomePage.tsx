@@ -7,20 +7,23 @@ import type { Review } from "../types/review";
 import "./HomePage.css";
 
 const HomePage = () => {
+  // Böcker och query från zustand store
   const books = useBookStore((state) => state.books);
   const setBooks = useBookStore((state) => state.setBooks);
   const query = useBookStore((state) => state.query);
   const setQuery = useBookStore((state) => state.setQuery);
 
+  // Senaste recensioner från zustand store
   const latestReviews = useReviewStore((state) => state.latestReviews);
   const fetchLatest = useReviewStore((state) => state.fetchLatest);
 
+  // Hämtar böcker från API baserat på sökquery
   const fetchBooks = async (searchQuery: string) => {
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim()) return; // Ignorera tomma sökningar
 
     try {
       const books = await searchBooks(searchQuery);
-      setBooks(books);
+      setBooks(books); // Uppdaterar store med resultat
     } catch (err) {
       console.error("Error fetching books:", err);
     }

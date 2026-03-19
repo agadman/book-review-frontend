@@ -15,12 +15,14 @@ interface ReviewFormProps {
 const ReviewForm = ({ bookId, bookTitle, bookThumbnail, onReviewCreated }: ReviewFormProps) => {
     const [text, setText] = useState("");
     const [rating, setRating] = useState(1);
+    const [error, setError] = useState<string | null>(null);
 
     const token = useAuthStore((state) => state.token);
 
      // Hanterar ändringar i textfältet
     const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setText(event.target.value);
+        if (error) setError(null);
     };
 
      // Hanterar ändringar i betygsselect
@@ -33,6 +35,11 @@ const ReviewForm = ({ bookId, bookTitle, bookThumbnail, onReviewCreated }: Revie
         event.preventDefault();
 
         if (!token) return;
+
+        if (!text.trim()) {
+            setError("Du måste skriva något i recensionen!");
+            return;
+        }
 
         const review: CreateReviewData = {
             bookId,
@@ -66,6 +73,7 @@ const ReviewForm = ({ bookId, bookTitle, bookThumbnail, onReviewCreated }: Revie
             Recension
             <textarea value={text} onChange={handleTextChange} placeholder="Vad tyckte du om boken?" />
         </label>
+        {error && <p className="review-error">{error}</p>}
         <label>
             Betyg:
             <select value={rating} onChange={handleRatingChange}>

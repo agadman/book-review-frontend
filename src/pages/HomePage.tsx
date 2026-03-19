@@ -5,6 +5,7 @@ import { useBookStore } from "../store/bookStore";
 import { useReviewStore } from "../store/reviewStore";
 import type { Review } from "../types/review";
 import "./HomePage.css";
+import { Star } from "lucide-react";
 
 const HomePage = () => {
   // Böcker och query från zustand store
@@ -38,6 +39,17 @@ const HomePage = () => {
   useEffect(() => {
     fetchLatest();
   }, [fetchLatest]);
+
+  const renderStars = (rating: number) => {
+  return Array.from({ length: 5 }, (_, i) => (
+    <Star
+      key={i}
+      size={16}
+      fill={i < rating ? "gold" : "none"}
+      stroke={i < rating ? "gold" : "#ccc"}
+    />
+  ));
+};
 
   return (
     <div className="wrapper">
@@ -91,7 +103,12 @@ const HomePage = () => {
               </div>
 
               <div className="review-footer">
-                <p>{review.username} - {review.rating}/5</p>
+                <div className="review-meta">
+                  <span>{review.username}</span>
+                  <div className="stars">
+                    {renderStars(review.rating)}
+                  </div>
+                </div>
                 <small>{new Date(review.createdAt).toLocaleDateString()}</small>
               </div>
             </div>

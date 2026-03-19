@@ -9,6 +9,7 @@ import { useAuthStore } from "../store/authStore";
 import "./BookDetailsPage.css";
 import { ArrowLeft } from "lucide-react";
 import type { Review } from "../types/review";
+import { Star } from "lucide-react";
 
 const BookDetailsPage = () => {
   const { id } = useParams(); // Bok-ID från URL
@@ -78,6 +79,17 @@ const BookDetailsPage = () => {
   if (error) return <p>{error}</p>;
   if (!book) return <p>Ingen bok vald</p>;
 
+  const renderStars = (rating: number) => {
+  return Array.from({ length: 5 }, (_, i) => (
+    <Star
+      key={i}
+      size={16}
+      fill={i < rating ? "gold" : "none"}
+      stroke={i < rating ? "gold" : "#ccc"}
+    />
+  ));
+};
+
   return (
     <div className="book-details-wrapper">
       <Link to="/" className="back-link">
@@ -115,9 +127,12 @@ const BookDetailsPage = () => {
           {reviews.map((review) => (
             <li key={review.id} className="review-item">
               <p className="review-text">{review.text}</p>
-              <p className="review-meta">
-                <strong>{review.username}</strong> • {review.rating}/5
-              </p>
+              <div className="review-meta">
+                <strong>{review.username}</strong>
+                <div className="stars">
+                  {renderStars(review.rating)}
+                </div>
+              </div>
               <small>{new Date(review.createdAt).toLocaleDateString()}</small>
             </li>
           ))}

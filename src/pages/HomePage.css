@@ -94,11 +94,6 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.review-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
 .review-card img {
   width: 100%;
   max-width: 120px;
@@ -124,6 +119,17 @@
   margin-top: 1rem;
   font-size: 0.85rem;
   color: #666;
+}
+
+.review-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stars {
+  display: flex;
+  gap: 2px;
 }
 
 h1, h2 {

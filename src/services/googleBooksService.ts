@@ -1,5 +1,6 @@
 import type { Book, GoogleBookItem } from "../types/book";
 
+const GOOGLE_BOOKS_URL = import.meta.env.VITE_GOOGLE_BOOKS_URL;
 const GOOGLE_BOOKS_KEY = import.meta.env.VITE_GOOGLE_BOOKS_KEY;
 
 // Söker efter böcker via Google Books API
@@ -8,7 +9,7 @@ export const searchBooks = async (query: string): Promise<Book[]> => {
   
   // Söker endast på boktitlar (intitle) för mer relevanta resultat
   const resp = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=intitle:${encodeURIComponent(query)}&maxResults=10&key=${GOOGLE_BOOKS_KEY}`
+    `${GOOGLE_BOOKS_URL}?q=intitle:${encodeURIComponent(query)}&maxResults=10&key=${GOOGLE_BOOKS_KEY}`
   );
 
   // Felhantering om API-anrop misslyckas

@@ -70,13 +70,21 @@ const HomePage = () => {
       ) : (
         <div className="grid">
           {books.map((book) => (
-            <section key={book.id} className="book-card">
-              <h2>
-                <Link to={`/books/${book.id}`}>{book.title}</Link>
-              </h2>
-              <p>{book.authors.join(", ")}</p>
-              {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
-            </section>
+            <div key={book.id} className="review-card">
+              <div className="review-content">
+                {book.thumbnail && (
+                  <img src={book.thumbnail} alt={book.title} />
+                )}
+
+                <h3>
+                  <Link to={`/books/${book.id}`} className="review-book-title">
+                    {book.title}
+                  </Link>
+                </h3>
+
+                <p>{book.authors.join(", ")}</p>
+              </div>
+            </div>
           ))}
         </div>
       )}

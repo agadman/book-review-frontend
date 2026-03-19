@@ -29,4 +29,4 @@ Applikationen är uppdelad i flera delar:
 - Types – TypeScript-interfaces för struktur och typkontroll
 
 ## Publicerad URL
-Kommer snart...
+https://simple-book-reviews.netlify.app/

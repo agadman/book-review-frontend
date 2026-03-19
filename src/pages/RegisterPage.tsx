@@ -17,6 +17,11 @@ const RegisterPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!username.trim() || !password.trim()) {
+      setError("Vänligen fyll i användarnamn och lösenord");
+      return;
+    }
+
     try {
       setError(null);
 

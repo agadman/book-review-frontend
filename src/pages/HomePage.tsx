@@ -77,9 +77,9 @@ const HomePage = () => {
           {latestReviews.map((review: Review) => (
             <div key={review.id} className="review-card">
               <div className="review-info">
+                {review.bookThumbnail && <img src={review.bookThumbnail} alt={review.bookTitle} />}
                 <h3>
-                  <Link to={`/books/${review.bookId}`}>
-                    {review.bookThumbnail && <img src={review.bookThumbnail} alt={review.bookTitle} />}
+                  <Link to={`/books/${review.bookId}`} className="review-book-title"> 
                     {review.bookTitle || "Okänd bok"}
                   </Link>
                 </h3>

@@ -83,8 +83,13 @@
   border-radius: 4px;
 }
 
+.review-book-title {
+  text-decoration: none;
+  color: #333;
+}
+
 .review-info h3 {
-  margin: 0;
+  margin-bottom: 0.8rem;
   font-size: 1rem;
 }
 

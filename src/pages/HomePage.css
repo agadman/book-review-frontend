@@ -1,114 +1,143 @@
 .wrapper {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
 .search-form {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 2rem;
-    justify-content: center;
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
 }
 
 .search-input {
-    border-radius: 0.9rem;
-    padding: 0.2rem 1.2rem;
-    border: 1px solid #ddd;
-    width: 100%;
-    max-width: 400px;
-    font-size: 1rem;
+  border-radius: 0.9rem;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid #ddd;
+  width: 100%;
+  max-width: 400px;
+  font-size: 1rem;
 }
 
 .placeholder-text {
-    text-align: center;
-    font-style: italic;
-    color: #777;
-    padding: 2rem 0;
-}
-
-.book-card {
-  width: 100%;
-}
-
-.book-card h2 {
-    font-size: 1.1rem;
-    margin: 0 0 0.3rem 0;
-    color: #333;
-    text-decoration: none;
-}
-
-.book-card h2 a {
-    color: #333;
-    text-decoration: none;
-}
-
-.book-card h2 a:hover {
-    text-decoration: underline;
-}
-
-.book-card p {
-    margin: 0;
-    color: #555;
-    font-size: 0.9rem;
-}
-
-.book-card img {
-    margin-top: 0.5rem;
-    max-width: 100px;
-    border-radius: 6px;
+  text-align: center;
+  font-style: italic;
+  color: #777;
+  padding: 2rem 0;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  justify-content: center;
+}
+
+.book-card {
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 1rem;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.book-card h2 {
+  font-size: 1.1rem;
+  margin: 0 0 0.3rem 0;
+}
+
+.book-card h2 a {
+  color: #333;
+  text-decoration: none;
+}
+
+.book-card h2 a:hover {
+  text-decoration: underline;
+}
+
+.book-card p {
+  margin: 0;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.book-card img {
+  margin-top: 0.5rem;
+  max-width: 120px;
+  border-radius: 6px;
 }
 
 .review-card {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
   border: 1px solid #ddd;
   padding: 1rem;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: #fff;
+  height: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.review-card img.review-image {
-  width: 80px;
-  height: 120px;
-  object-fit: cover;
-  margin-right: 1rem;
-  border-radius: 4px;
+.review-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.review-card img {
+  width: 100%;
+  max-width: 120px;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
 }
 
 .review-book-title {
   text-decoration: none;
   color: #333;
+  font-weight: 600;
 }
 
-.review-info h3 {
-  margin-bottom: 0.8rem;
-  font-size: 1rem;
+.review-content {
+  flex-grow: 1;
+}
+
+.review-content p {
+  margin: 0.3rem 0;
+}
+
+.review-footer {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+h1, h2 {
+  text-align: center;
 }
 
 @media (min-width: 768px) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .review-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .review-card img.review-image {
-    margin-right: 0;
-    margin-bottom: 0.5rem;
-  }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1024px) {
   .grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }

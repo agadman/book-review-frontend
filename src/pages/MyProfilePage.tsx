@@ -74,9 +74,7 @@ const MyProfilePage = () => {
 
   return (
     <div className="profile-wrapper">
-      <h1>Min profil</h1>
-      <h2>Mina recensioner</h2>
-
+      <h1>Mina recensioner</h1>
       <ul className="review-list">
         {reviews.map((review) => (
           <li key={review.id} className="review-item">

@@ -42,7 +42,7 @@ const Header = () => {
             <li><NavLink to="/" onClick={closeMenu}>Startsida</NavLink></li>
 
             {user && (
-              <li><NavLink to="/profile" onClick={closeMenu}>Min profil</NavLink></li>
+              <li><NavLink to="/profile" onClick={closeMenu}>Mina recensioner</NavLink></li>
             )}
 
             {!user ? (

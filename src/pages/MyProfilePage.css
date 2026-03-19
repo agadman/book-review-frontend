@@ -3,6 +3,10 @@
   padding: 0 1rem;
 }
 
+.profile-wrapper h1, h2 {
+  margin-bottom: 2rem;
+}
+
 .review-list {
   list-style: none;
   width: 100%;

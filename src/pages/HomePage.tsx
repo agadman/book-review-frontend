@@ -52,7 +52,7 @@ const HomePage = () => {
         <button type="submit">Sök</button>
       </form>
 
-      <h1>Böcker</h1>
+      <h1>Böcker och Recensioner</h1>
       {books.length === 0 ? (
         <p className="placeholder-text">Sök efter en bok för att se resultaten här...</p>
       ) : (
@@ -76,14 +76,21 @@ const HomePage = () => {
         <div className="grid">
           {latestReviews.map((review: Review) => (
             <div key={review.id} className="review-card">
-              <div className="review-info">
-                {review.bookThumbnail && <img src={review.bookThumbnail} alt={review.bookTitle} />}
+              <div className="review-content">
+                {review.bookThumbnail && (
+                  <img src={review.bookThumbnail} alt={review.bookTitle} />
+                )}
+
                 <h3>
-                  <Link to={`/books/${review.bookId}`} className="review-book-title"> 
+                  <Link to={`/books/${review.bookId}`} className="review-book-title">
                     {review.bookTitle || "Okänd bok"}
                   </Link>
                 </h3>
+
                 <p>{review.text.substring(0, 40)}...</p>
+              </div>
+
+              <div className="review-footer">
                 <p>{review.username} - {review.rating}/5</p>
                 <small>{new Date(review.createdAt).toLocaleDateString()}</small>
               </div>
